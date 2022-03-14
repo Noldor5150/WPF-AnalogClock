@@ -7,9 +7,8 @@
         xmlns:custom="clr-namespace:AnalogClock.CustomControls"
         mc:Ignorable="d"
         Title="AnalogClock" Height="450" Width="800">
-    <StackPanel>
-        <custom:AnalogClock ShowSeconds="False"/>
-        <custom:AnalogClock/>
-        <custom:AnalogClock/>
+    <StackPanel HorizontalAlignment="Center">
+        <custom:AnalogClock ShowSeconds="True" TimeChanged="AnalogClock_TimeChanged"/>
+        <TextBlock x:Name="tbTime" Text="00:00:00" Margin="10" FontSize="50"/>
     </StackPanel>
 </Window>

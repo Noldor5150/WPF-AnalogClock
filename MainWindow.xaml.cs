@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AnalogClock.CustomControls;
 
 namespace AnalogClock
 {
@@ -24,5 +25,15 @@ namespace AnalogClock
         {
             InitializeComponent();
         }
+
+      
+
+
+        private void AnalogClock_TimeChanged(object sender, TimeChangedEventArgs e)
+        {
+            tbTime.Text = e.NewTime.ToString("hh:mm:ss ");
+        }
+
+       
     }
 }

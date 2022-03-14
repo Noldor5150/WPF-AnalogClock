@@ -12,6 +12,7 @@ using System.Windows.Threading;
 
 namespace AnalogClock.CustomControls
 {
+    public delegate void TimeChangedEventHandler(object sender, TimeChangedEventArgs args);
     public class AnalogClock : Control
     {
         private Line hourHand;
@@ -20,11 +21,26 @@ namespace AnalogClock.CustomControls
 
         public static DependencyProperty ShowSecondsProperty = DependencyProperty.Register("ShowSeconds", typeof(bool), typeof(AnalogClock), new PropertyMetadata(true));
 
+        public static RoutedEvent TimeChangedEvent = EventManager.RegisterRoutedEvent("TimeChanged",
+            RoutingStrategy.Bubble, typeof(TimeChangedEventHandler), typeof(AnalogClock));
         public bool ShowSeconds
         {
             get => (bool)GetValue(ShowSecondsProperty);
             set => SetValue(ShowSecondsProperty, value);
         }
+
+        public event RoutedEventHandler TimeChanged
+        {
+            add
+            {
+                AddHandler(TimeChangedEvent, value);
+            }
+            remove
+            {
+                RemoveHandler(TimeChangedEvent, value);
+            }
+        }
+
         static AnalogClock()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AnalogClock), new FrameworkPropertyMetadata(typeof(AnalogClock)));
@@ -44,25 +60,25 @@ namespace AnalogClock.CustomControls
               };
               secondHand.SetBinding(VisibilityProperty, showSecondHandBinding);
             */
-            UpdateHandAngles();
+            UpdateHandAngles(DateTime.Now);
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Tick +=(s,e)=> UpdateHandAngles();
+            timer.Tick +=(s,e)=> OnTimeChanged(DateTime.Now);
             timer.Start();
             base.OnApplyTemplate();
         }
 
-     /*   protected override void OnTimeChanged(DateTime time)
+  
+        protected virtual void OnTimeChanged(DateTime time)
         {
             UpdateHandAngles(time);
-            base.OnTimeChanged(time);
+            RaiseEvent( new TimeChangedEventArgs(TimeChangedEvent,this){NewTime = time});
         }
-     */
-        private void UpdateHandAngles()
+        private void UpdateHandAngles(DateTime time)
         {
-            hourHand.RenderTransform = new RotateTransform((DateTime.Now.Hour / 12.0) * 360, 0.5, 0.5);
-            minuteHand.RenderTransform = new RotateTransform((DateTime.Now.Minute / 60.0) * 360, 0.5, 0.5);
-            secondHand.RenderTransform = new RotateTransform((DateTime.Now.Second / 60.0) * 360, 0.5, 0.5);
+            hourHand.RenderTransform = new RotateTransform((time.Hour / 12.0) * 360, 0.5, 0.5);
+            minuteHand.RenderTransform = new RotateTransform((time.Minute / 60.0) * 360, 0.5, 0.5);
+            secondHand.RenderTransform = new RotateTransform((time.Second / 60.0) * 360, 0.5, 0.5);
         }
     }
 }
