@@ -7,7 +7,9 @@
         xmlns:custom="clr-namespace:AnalogClock.CustomControls"
         mc:Ignorable="d"
         Title="AnalogClock" Height="450" Width="800">
-    <Grid>
+    <StackPanel>
+        <custom:AnalogClock ShowSeconds="False"/>
         <custom:AnalogClock/>
-    </Grid>
+        <custom:AnalogClock/>
+    </StackPanel>
 </Window>
