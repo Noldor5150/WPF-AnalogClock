@@ -22,14 +22,14 @@ namespace AnalogClock.CustomControls
         public static DependencyProperty ShowSecondsProperty = DependencyProperty.Register("ShowSeconds", typeof(bool), typeof(AnalogClock), new PropertyMetadata(true));
 
         public static RoutedEvent TimeChangedEvent = EventManager.RegisterRoutedEvent("TimeChanged",
-            RoutingStrategy.Bubble, typeof(TimeChangedEventHandler), typeof(AnalogClock));
+            RoutingStrategy.Bubble, typeof(RoutedPropertyChangedEventHandler<DateTime>), typeof(AnalogClock));
         public bool ShowSeconds
         {
             get => (bool)GetValue(ShowSecondsProperty);
             set => SetValue(ShowSecondsProperty, value);
         }
 
-        public event RoutedEventHandler TimeChanged
+        public event RoutedPropertyChangedEventHandler<DateTime> TimeChanged
         {
             add
             {
@@ -72,7 +72,7 @@ namespace AnalogClock.CustomControls
         protected virtual void OnTimeChanged(DateTime time)
         {
             UpdateHandAngles(time);
-            RaiseEvent( new TimeChangedEventArgs(TimeChangedEvent,this){NewTime = time});
+            RaiseEvent( new RoutedPropertyChangedEventArgs<DateTime>(DateTime.Now.AddSeconds(-1),DateTime.Now, TimeChangedEvent ));
         }
         private void UpdateHandAngles(DateTime time)
         {
