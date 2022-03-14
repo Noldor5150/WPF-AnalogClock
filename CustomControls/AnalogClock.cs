@@ -72,8 +72,22 @@ namespace AnalogClock.CustomControls
         protected virtual void OnTimeChanged(DateTime time)
         {
             UpdateHandAngles(time);
+            UpdateTimeState(time);
             RaiseEvent( new RoutedPropertyChangedEventArgs<DateTime>(DateTime.Now.AddSeconds(-1),DateTime.Now, TimeChangedEvent ));
         }
+
+        private void UpdateTimeState(DateTime time)
+        {
+            if (time.Hour >6 && time.Hour<18)
+            {
+                VisualStateManager.GoToState(this, "Day", false);
+            }
+            else
+            {
+                VisualStateManager.GoToState(this, "Night", false);
+            }
+        }
+
         private void UpdateHandAngles(DateTime time)
         {
             hourHand.RenderTransform = new RotateTransform((time.Hour / 12.0) * 360, 0.5, 0.5);
