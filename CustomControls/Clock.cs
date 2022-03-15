@@ -14,7 +14,46 @@ namespace AnalogClock.CustomControls
     public class Clock : Control
     {
         public static DependencyProperty ShowSecondsProperty = DependencyProperty.Register("ShowSeconds", typeof(bool), typeof(Clock), new PropertyMetadata(true));
-        public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time",typeof(DateTime), typeof(Clock),new PropertyMetadata(DateTime.Now));
+        public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time",typeof(DateTime),
+            typeof(Clock),new PropertyMetadata(DateTime.Now, TimePropertyChanged, TimeCoerceValue));
+
+        private static object TimeCoerceValue(DependencyObject d, object baseValue)
+        {
+            if (baseValue is DateTime)
+            {
+                DateTime time =(DateTime) baseValue;
+
+                if (time.Second % 2 == 1)
+                {
+                    baseValue = time.AddSeconds(+1);
+                }
+            }
+
+            return baseValue;
+        }
+
+        private static bool TimeValidateValue(object value)
+        {
+            if (value is DateTime)
+            {
+                DateTime time = (DateTime) value;
+                if (time.Second % 2 == 1)
+                {
+                   return false;
+                }
+            }
+            return true;
+        }
+
+        private static void TimePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Clock)
+            {
+                Clock clock = d as Clock;
+                clock.RaiseEvent(new RoutedPropertyChangedEventArgs<DateTime>((DateTime)e.OldValue,(DateTime) e.NewValue, TimeChangedEvent));
+            }
+        }
+
         public static RoutedEvent TimeChangedEvent = EventManager.RegisterRoutedEvent("TimeChanged",
             RoutingStrategy.Bubble, typeof(RoutedPropertyChangedEventHandler<DateTime>), typeof(Clock));
         public bool ShowSeconds
@@ -51,7 +90,7 @@ namespace AnalogClock.CustomControls
         protected virtual void OnTimeChanged(DateTime newTime)
         {
             UpdateTimeState(newTime);
-            RaiseEvent(new RoutedPropertyChangedEventArgs<DateTime>(Time, newTime, TimeChangedEvent));
+          
             Time = newTime;
         }
         private void UpdateTimeState(DateTime time)

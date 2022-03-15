@@ -9,6 +9,6 @@
         Title="AnalogClock" Height="450" Width="800">
     <StackPanel HorizontalAlignment="Center">
         <custom:AnalogClock ShowSeconds="True" TimeChanged="AnalogClock_TimeChanged"/>
-        <custom:DigitalClock ShowSeconds="False" ColonBlink="False" HorizontalAlignment="Center" Margin="10" FontSize="50"/>
+        <custom:DigitalClock ShowSeconds="True" ColonBlink="True" HorizontalAlignment="Center" Margin="10" FontSize="50"/>
     </StackPanel>
 </Window>
