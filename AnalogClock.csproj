@@ -59,6 +59,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CustomControls\DigitalClockStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -68,6 +72,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CustomControls\AnalogClock.cs" />
+    <Compile Include="CustomControls\Clock.cs" />
+    <Compile Include="CustomControls\DigitalClock.cs" />
     <Compile Include="CustomControls\TimeChangedEventArgs.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
